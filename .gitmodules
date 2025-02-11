@@ -1,0 +1,3 @@
+[submodule "src/qargparse"]
+	path = src/qargparse
+	url = https://github.com/mottosso/qargparse.py.git
