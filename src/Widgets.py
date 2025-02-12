@@ -39,7 +39,7 @@ logger = Core.get_logger()
 
 def apply_stylesheet(widget):
     """Apply the application's stylesheet to a widget.
-    
+
     Args:
         widget: The Qt widget to apply the stylesheet to
     """
@@ -53,6 +53,7 @@ def apply_stylesheet(widget):
 
 class PROCESS_TABLE_HEADER(IntEnum):
     """Enumeration for process table column indices."""
+
     PROCESS = 0
     PARAMETER = 1
     STDOUT = 2
@@ -63,14 +64,14 @@ class PROCESS_TABLE_HEADER(IntEnum):
 
 class SettingsDialog(QDialog):
     """Dialog for editing application settings.
-    
+
     This dialog allows users to view and modify the application's configuration
     in JSON format.
     """
-    
+
     def __init__(self, parent=None):
         """Initialize the settings dialog.
-        
+
         Args:
             parent: Parent widget
         """
@@ -98,7 +99,7 @@ class SettingsDialog(QDialog):
 
     def accept(self):
         """Handle dialog acceptance.
-        
+
         Saves the modified configuration and closes the dialog.
         """
         config = json.loads(self._output_text_edit.toPlainText())
@@ -108,7 +109,7 @@ class SettingsDialog(QDialog):
 
     def reject(self):
         """Handle dialog rejection.
-        
+
         Closes the dialog without saving changes.
         """
         super(SettingsDialog, self).reject()
@@ -116,14 +117,14 @@ class SettingsDialog(QDialog):
 
 class LogDialog(QDialog):
     """Dialog for displaying process output logs.
-    
+
     This dialog shows the output from running processes and maintains
     a maximum buffer size to prevent memory issues.
     """
-    
+
     def __init__(self, parent=None):
         """Initialize the log dialog.
-        
+
         Args:
             parent: Parent widget
         """
@@ -147,9 +148,9 @@ class LogDialog(QDialog):
 
     def append_message(self, msg):
         """Append a message to the log.
-        
+
         Maintains a maximum buffer size by removing old content if necessary.
-        
+
         Args:
             msg: Message to append
         """
@@ -174,17 +175,17 @@ class LogDialog(QDialog):
 
 class BatchQProcess(QProcess):
     """Process handler for running commands.
-    
+
     This class extends QProcess to handle command execution and logging.
     It provides methods for starting processes and handling their output.
-    
+
     Args:
         _name: Name of the process
         _command: Command to execute
         _script_file: Script file to run
         _arguments: Command arguments
     """
-    
+
     def __init__(self, _name, _command, _script_file, _arguments):
         QProcess.__init__(self)
 
@@ -251,17 +252,17 @@ class BatchQProcess(QProcess):
 
 class CommandRunnerWidget(QWidget):
     """Main widget for the Command Runner application.
-    
+
     This widget provides the interface for managing and executing commands.
     It includes a command list, process table, and controls for running
     and managing processes.
     """
-    
-    COMMAND_DATA_ROLE = int(Qt.ItemDataRole.UserRole) + 1
+
+    COMMAND_DATA_ROLE = Qt.UserRole + 1
 
     def __init__(self, parent=None):
         """Initialize the command runner widget.
-        
+
         Args:
             parent: Parent widget
         """
@@ -295,7 +296,7 @@ class CommandRunnerWidget(QWidget):
 
     def build_command_list(self, command_path=None) -> None:
         """Build the list of available commands.
-        
+
         Args:
             command_path: Optional path to look for commands
         """
@@ -313,9 +314,9 @@ class CommandRunnerWidget(QWidget):
 
     def on_command_selected(self, selected, deselected) -> None:
         """Handle command selection.
-        
+
         Rebuilds the UI for the selected command.
-        
+
         Args:
             selected: Selected command
             deselected: Deselected command
@@ -329,10 +330,10 @@ class CommandRunnerWidget(QWidget):
 
     def get_command(self, index):
         """Get the command at the specified index.
-        
+
         Args:
             index: Index of the command
-        
+
         Returns:
             Command object
         """
@@ -342,7 +343,7 @@ class CommandRunnerWidget(QWidget):
 
     def add_process(self, *args):
         """Add a new process to the table.
-        
+
         Creates a new process and adds it to the table.
         """
         cur_command_index = self.ui.command_list_view.selectedIndexes()
@@ -373,10 +374,10 @@ class CommandRunnerWidget(QWidget):
         executer_py = CUR_DIR / "CommandExecuter.py"
 
         logger.info(
-            f"""add process: 
-                command: {command}, 
-                exectuer_py_path: {executer_py}, 
-                command_py_path: {cmd_py_path}, 
+            f"""add process:
+                command: {command},
+                exectuer_py_path: {executer_py},
+                command_py_path: {cmd_py_path},
                 arguments_json: {arguments_json}
             """
         )
@@ -450,7 +451,7 @@ class CommandRunnerWidget(QWidget):
 
     def remove_selected_process(self):
         """Remove the selected process from the table.
-        
+
         Removes the selected process from the table and the process list.
         """
         row = self.process_tableWidget.currentRow()
@@ -462,7 +463,7 @@ class CommandRunnerWidget(QWidget):
 
     def reset(self):
         """Reset the process table and list.
-        
+
         Kills all running processes, clears the table, and resets the process list.
         """
         for p in self._process_list:
@@ -474,9 +475,9 @@ class CommandRunnerWidget(QWidget):
 
     def kill_btn_clicked_cb(self, _process, _status_item, _kill_btn):
         """Handle kill button click.
-        
+
         Kills the process and updates the status item.
-        
+
         Args:
             _process: Process to kill
             _status_item: Status item to update
@@ -488,9 +489,9 @@ class CommandRunnerWidget(QWidget):
 
     def handle_finished_cb(self, state, _status_item):
         """Handle process finished.
-        
+
         Updates the status item.
-        
+
         Args:
             state: Process state
             _status_item: Status item to update
@@ -499,9 +500,9 @@ class CommandRunnerWidget(QWidget):
 
     def handle_stateChanged_cb(self, state, _status_item, _kill_btn):
         """Handle process state change.
-        
+
         Updates the status item and kill button.
-        
+
         Args:
             state: Process state
             _status_item: Status item to update
@@ -517,9 +518,9 @@ class CommandRunnerWidget(QWidget):
 
     def run_btn_clicked_cb(self, _process):
         """Handle run button click.
-        
+
         Starts the process.
-        
+
         Args:
             _process: Process to start
         """
@@ -527,7 +528,7 @@ class CommandRunnerWidget(QWidget):
 
     def open_settings(self):
         """Open the settings dialog.
-        
+
         Opens the settings dialog and rebuilds the executable commands.
         """
         settings = SettingsDialog()
@@ -537,7 +538,7 @@ class CommandRunnerWidget(QWidget):
 
     def build_executalbe_commands(self):
         """Build the executable commands.
-        
+
         Builds the list of executable commands from the configuration.
         """
         config = Core.get_command_config()

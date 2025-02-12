@@ -4,14 +4,15 @@ import tempfile
 import webbrowser
 from dataclasses import dataclass, field
 
-import requests
+from contextlib import suppress
+
+with suppress(ModuleNotFoundError):
+    import requests
 
 import Core
+from CommandBase import CommandBase
 
 logger = Core.get_logger()
-
-
-from CommandBase import CommandBase
 
 
 @dataclass
@@ -23,9 +24,7 @@ class Cmd_NewsHeadliner(CommandBase):
     country_code: str = field(
         default="us", metadata={"help": "Country Code", "items": ["us", "jp", "tw"]}
     )
-    query: str = field(
-        default="", metadata={"help": "Query string without space"}
-    )
+    query: str = field(default="", metadata={"help": "Query string without space"})
     category: str = field(
         default="all",
         metadata={
@@ -41,9 +40,7 @@ class Cmd_NewsHeadliner(CommandBase):
             ],
         },
     )
-    api_key: str = field(
-        default="", metadata={"help": "API Key"}
-    )
+    api_key: str = field(default="", metadata={"help": "API Key"})
 
     def run(self, data={}):
         country_code = data["country_code"]

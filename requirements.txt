@@ -1,15 +1,16 @@
 PySide6
 Qt.py
 qtawesome
-matplotlib
-transformers
-torch
-torchvision 
-torchaudio 
-requests
-beautifulsoup4
-yfinance 
-yt-dlp
-trendspy
-pandas
+# matplotlib
+# transformers
+# torch
+# torchvision 
+# torchaudio 
+# requests
+# types-requests
+# beautifulsoup4
+# yfinance 
+# yt-dlp
+# trendspy
+# pandas
 pytest

@@ -2,7 +2,6 @@ import importlib
 import json
 import os
 import timeit
-from datetime import datetime
 from pathlib import Path
 
 import Core
@@ -12,12 +11,12 @@ logger = Core.get_logger()
 
 def execute(ARG_JSON_PATH: str) -> bool:
     """Execute a command using arguments from a JSON file.
-    
+
     This function handles the execution of commands by:
     1. Loading command arguments from a JSON file
     2. Importing and instantiating the specified command class
     3. Running the command with the provided parameters
-    
+
     The JSON file should have the following structure:
     {
         "cmd_py_path": "path to the python file contains the command class",
@@ -25,20 +24,19 @@ def execute(ARG_JSON_PATH: str) -> bool:
         "param2": "value2",
         ...
     }
-    
+
     Args:
         ARG_JSON_PATH (str): Path to the JSON file containing command arguments
-        
+
     Returns:
         bool: True if command executed successfully, False otherwise
-        
+
     Raises:
         FileNotFoundError: If the arguments JSON file doesn't exist
         ImportError: If the command module cannot be imported
         ValueError: If the JSON file has invalid format
     """
     try:
-
         logger.info("arguments_json_path: {0}".format(ARG_JSON_PATH))
         if not Path(ARG_JSON_PATH).exists():
             logger.info("Arguments not existed: {0}".format(ARG_JSON_PATH))
@@ -97,6 +95,7 @@ if __name__ == "__main__":
     # ARG_JSON_PATH = args.ARG_JSON_PATH
     # execute(ARG_JSON_PATH)
 
-    # NOTE: due to the way blender handles the arguments, currently use environment variable to pass the argument json
+    # NOTE: due to the way blender handles the arguments, currently use environment
+    # variable to pass the argument json
     ARG_JSON_PATH = os.environ.get("ARG_JSON_PATH", "")
     execute(ARG_JSON_PATH)

@@ -1,9 +1,11 @@
 import inspect
-from pathlib import Path
 import time
-import Core
 from contextlib import ContextDecorator
+from pathlib import Path
+
 from Qt import QtCompat, QtWidgets
+
+import Core
 
 logger = Core.get_logger()
 
@@ -13,9 +15,11 @@ def measure_time(func):
         start = time.time()
         result = func(*args, **kwargs)
         end = time.time()
-        logger.info(f"{func.__name__} took {end-start:.2f} seconds")
+        logger.info(f"{func.__name__} took {end - start:.2f} seconds")
         return result
+
     return wrapper
+
 
 class elapse_time(ContextDecorator):
     def __init__(self, msg):
@@ -28,8 +32,9 @@ class elapse_time(ContextDecorator):
     def __exit__(self, type, value, traceback):
         elapsed = time.perf_counter() - self.time
         logger.info(
-            f"{self.msg} took {elapsed:.3f} seconds ({elapsed/60.0:.3f} minutes)"
+            f"{self.msg} took {elapsed:.3f} seconds ({elapsed / 60.0:.3f} minutes)"
         )
+
 
 def ui_path(cls) -> str:
     name = cls.__name__ + ".ui"

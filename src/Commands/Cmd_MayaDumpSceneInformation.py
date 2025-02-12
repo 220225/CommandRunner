@@ -2,17 +2,16 @@ from contextlib import suppress
 
 with suppress(ModuleNotFoundError):
     import maya.standalone
+
     maya.standalone.initialize(name="python")
 
     import maya.cmds as cmds
 
 
 import Core
+from CommandBase import CommandBase
 
 logger = Core.get_logger()
-
-
-from CommandBase import CommandBase
 
 
 class Cmd_MayaDumpSceneInformation(CommandBase):

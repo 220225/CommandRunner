@@ -1,9 +1,11 @@
 from typing import Dict
+
 from Qt.QtWidgets import (
     QTextEdit,
 )
 
 import qargparse.qargparse as qargparse
+
 from .QAargparseUI import QAargparseUI
 
 

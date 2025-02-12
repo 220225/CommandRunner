@@ -1,16 +1,16 @@
 import json
+from contextlib import suppress
 from dataclasses import dataclass, field
 from pathlib import Path
-from contextlib import suppress
 
 with suppress(ModuleNotFoundError):
     import bpy
 
 import Core
+from CommandBase import CommandBase
 
 logger = Core.get_logger()
 
-from CommandBase import CommandBase
 
 def get_object_info(obj):
     info = {
@@ -19,29 +19,34 @@ def get_object_info(obj):
         "location": list(obj.location),
         "rotation": list(obj.rotation_euler),
         "scale": list(obj.scale),
-        "visible": obj.visible_get()
+        "visible": obj.visible_get(),
     }
     info["custom_properties"] = {k: str(v) for k, v in obj.items()}
     return info
+
 
 def get_material_info(mat):
     return {
         "name": mat.name,
         "use_nodes": mat.use_nodes,
-        "blend_method": mat.blend_method
+        "blend_method": mat.blend_method,
     }
+
 
 def get_scene_info():
     scene_info = {}
-    
+
     scene_info["objects"] = [get_object_info(obj) for obj in bpy.data.objects]
-        
+
     scene_info["materials"] = [get_material_info(mat) for mat in bpy.data.materials]
-        
-    scene_info["collections"] = [{"name": col.name, "objects": [obj.name for obj in col.objects]} 
-                                 for col in bpy.data.collections]
-    
+
+    scene_info["collections"] = [
+        {"name": col.name, "objects": [obj.name for obj in col.objects]}
+        for col in bpy.data.collections
+    ]
+
     return scene_info
+
 
 @dataclass
 class Cmd_BlenderDumpSceneInformation(CommandBase):
@@ -61,9 +66,9 @@ class Cmd_BlenderDumpSceneInformation(CommandBase):
                 "textures",
                 "cameras",
                 "lights",
-                "collections"
+                "collections",
             ],
-        }
+        },
     )
 
     def run(self, data={}):
@@ -73,10 +78,10 @@ class Cmd_BlenderDumpSceneInformation(CommandBase):
         for target_file in target_files:
             logger.info("process: {0}".format(target_file))
 
-            output_path = Path('E:/Temp/') / f"{Path(target_file).stem}_info.json"
+            output_path = Path("E:/Temp/") / f"{Path(target_file).stem}_info.json"
             # Get scene information
             scene_info = get_scene_info()
-            
+
             # Save to JSON
-            with open(output_path, 'w') as f:
+            with open(output_path, "w") as f:
                 json.dump(scene_info, f, indent=4)

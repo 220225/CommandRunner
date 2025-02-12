@@ -1,4 +1,4 @@
-from dataclasses import fields, MISSING
+from dataclasses import fields
 from typing import Any, Dict
 
 import Core
@@ -29,12 +29,11 @@ class QAargparseUI(CommandUIBase):
 
         self.data_fields = fields(self._cmd_cls)
         for data_field in self.data_fields:
-
-            if 'items' in data_field.metadata:
-                field_type = type(data_field.metadata['items'])
+            if "items" in data_field.metadata:
+                field_type = type(data_field.metadata["items"])
             else:
                 field_type = data_field.type
-            
+
             self.ui.add_argument(
                 name=data_field.name,
                 default=data_field.default,

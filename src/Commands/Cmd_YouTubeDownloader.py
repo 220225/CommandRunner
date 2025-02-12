@@ -1,6 +1,8 @@
+from contextlib import suppress
 from dataclasses import dataclass, field
 
-import yt_dlp
+with suppress(ModuleNotFoundError):
+    import yt_dlp
 
 import Core
 from CommandBase import CommandBase
@@ -19,11 +21,15 @@ class Cmd_YouTubeDownloader(CommandBase):
     def run(self, data={}):
         url = data["url"]
 
-        ydl_opts = {
-            "format": "bestvideo+bestaudio",  # Download the best video and audio quality available
-            "merge_output_format": "mp4",  # Merge video and audio into an MP4 file
-            "outtmpl": "%(title)s.%(ext)s",  # Set the output filename template
-        }
-        # Download the video
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
+        try:
+            ydl_opts = {
+                "format": "bestvideo+bestaudio",
+                "merge_output_format": "mp4",
+                "outtmpl": "%(title)s.%(ext)s",
+            }
+            # Download the video
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([url])
+
+        except Exception as e:
+            logger.error(f"Exception: {e}", exc_info=True)

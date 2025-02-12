@@ -1,7 +1,8 @@
 import tempfile
 import webbrowser
-from CommandBase import CommandBase
+
 import Core
+from CommandBase import CommandBase
 
 logger = Core.get_logger()
 
@@ -50,19 +51,25 @@ class Cmd_TextSummarizer(CommandBase):
     ui_class = "CmdUI_TextSummarizer"
 
     def run(self, data={}):
-        # speed up the lauching time when import this command
-        from transformers import pipeline
+        try:
+            # speed up the lauching time when import this command
+            from transformers import pipeline
 
-        text_paragraph = data["text_paragraph"]
+            text_paragraph = data["text_paragraph"]
 
-        summarizer = pipeline("summarization", model="philschmid/bart-large-cnn-samsum")
-        summary = summarizer(
-            text_paragraph, max_length=50, min_length=25, do_sample=False
-        )
+            summarizer = pipeline(
+                "summarization", model="philschmid/bart-large-cnn-samsum"
+            )
+            summary = summarizer(
+                text_paragraph, max_length=50, min_length=25, do_sample=False
+            )
 
-        html = generate_html_content_with_text(
-            text_paragraph, summary[0]["summary_text"]
-        )
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as f:
-            f.write(html.encode("utf-8"))
-            webbrowser.open_new_tab(f.name)
+            html = generate_html_content_with_text(
+                text_paragraph, summary[0]["summary_text"]
+            )
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as f:
+                f.write(html.encode("utf-8"))
+                webbrowser.open_new_tab(f.name)
+
+        except Exception as e:
+            logger.error(f"Exception: {e}", exc_info=True)

@@ -1,9 +1,11 @@
 import tempfile
 import webbrowser
+from contextlib import suppress
 from dataclasses import dataclass, field
 
-import requests
-from bs4 import BeautifulSoup as bs
+with suppress(ModuleNotFoundError):
+    import requests
+    from bs4 import BeautifulSoup as bs
 
 import Core
 from CommandBase import CommandBase
@@ -65,7 +67,8 @@ def generate_html_content_with_links_for_hackernews(links, title=""):
 
     for link in links:
         try:
-            html_content += f'<li><a href="{link["Link"]}">{link["Title"]}</a> - Votes: {link["Votes"]} - <a href="{link["Comments"]}">Comments</a></li>'
+            html_content += f'<li><a href="{link["Link"]}">{link["Title"]}</a> \
+                - Votes: {link["Votes"]} - <a href="{link["Comments"]}">Comments</a></li>'
         except Exception as e:
             logger.error(f"Exception: {e}")
 
@@ -125,34 +128,36 @@ class Cmd_TopVotesHackerNews(CommandBase):
     num_top_votes: int = field(
         default=20, metadata={"help": "Number of top votes to display"}
     )
-    num_pages: int = field(
-        default=5, metadata={"help": "Number of pages to scrape"}
-    )
+    num_pages: int = field(default=5, metadata={"help": "Number of pages to scrape"})
 
     def run(self, data={}):
         url = data["url"]
         num_top_votes = data["num_top_votes"]
         num_pages = data["num_pages"]
 
-        all_links = []
-        for page in range(1, num_pages + 1):
-            req = requests.get(f"{url}?p={page}")
+        try:
+            all_links = []
+            for page in range(1, num_pages + 1):
+                req = requests.get(f"{url}?p={page}")
 
-            soup = bs(req.text, "html.parser")
+                soup = bs(req.text, "html.parser")
 
-            links = soup.select(".titleline > a")
-            subtext = soup.select(".subtext")
+                links = soup.select(".titleline > a")
+                subtext = soup.select(".subtext")
 
-            all_links.extend(create_custom_hn(url, links, subtext))
+                all_links.extend(create_custom_hn(url, links, subtext))
 
-        all_links = sort_by_votes(all_links)
-        all_links = all_links[:num_top_votes]
-        html = generate_html_content_with_links_for_hackernews(
-            all_links,
-            title="Top Votes Hacker News",
-        )
+            all_links = sort_by_votes(all_links)
+            all_links = all_links[:num_top_votes]
+            html = generate_html_content_with_links_for_hackernews(
+                all_links,
+                title="Top Votes Hacker News",
+            )
 
-        # generate temp html file and open it in browser
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as f:
-            f.write(html.encode("utf-8"))
-            webbrowser.open_new_tab(f.name)
+            # generate temp html file and open it in browser
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as f:
+                f.write(html.encode("utf-8"))
+                webbrowser.open_new_tab(f.name)
+
+        except Exception as e:
+            logger.error(f"Exception: {e}", exc_info=True)
