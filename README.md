@@ -1,5 +1,5 @@
 # CommandRunner
-CommandRunner is my daily used command execution tool. It helps me to do a lot of batching works easily and able to implement some small handy tools.
+CommandRunner is my daily used command execution tool. It helps me to do a lot of batching works easily and able to implement variety of small handy tools.
 With automatically generated user interface or manual defined user interface. This utiltiy provides me a quick way to do many interesing things and exploring a lot of possibilities.
 
 ![screenshot_1](images/screenshot_1.png)
@@ -7,8 +7,8 @@ With automatically generated user interface or manual defined user interface. Th
 
 
 ## Use cases
-- **Use mayapy or blender batch python mode to run python scripts**
-- **Packaging modules into a compact application**
+- **Able to use mayapy or blender python mode to batch asset processing**
+- **Implement utility scripts with exposed parameters**
 - **Quick functionality validation and exploration**
 
 ## Features
