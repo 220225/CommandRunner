@@ -87,7 +87,7 @@ def save_config(config_name: str, config_data: dict) -> None:
         json.dump(config_data, f, indent=4)
 
 
-def add_file_logger(log_path: Path, formatter: logging.Formatter) -> None:
+def add_file_logger(log_path: Path, formatter: logging.Formatter = None) -> None:
     """Add a file handler to the logger.
 
     Args:
