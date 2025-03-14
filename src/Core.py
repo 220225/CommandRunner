@@ -87,7 +87,7 @@ def save_config(config_name: str, config_data: dict) -> None:
         json.dump(config_data, f, indent=4)
 
 
-def add_file_logger(log_path: Path, formatter: logging.Formatter | None = None) -> None:
+def add_file_logger(log_path: Path, formatter: logging.Formatter) -> None:
     """Add a file handler to the logger.
 
     Args:
@@ -95,7 +95,7 @@ def add_file_logger(log_path: Path, formatter: logging.Formatter | None = None) 
         formatter (logging.Formatter, optional): Custom formatter for log messages.
             If None, uses the default CORE_FORMATTER.
     """
-    if formatter is None:
+    if not formatter:
         formatter = CORE_FORMATTER
 
     fh = logging.FileHandler(log_path)
@@ -156,7 +156,7 @@ def get_commands_map(command_path: Optional[Path] = None) -> Dict[str, Any]:
     Returns:
         Dict[str, Any]: Mapping of command labels to command classes
     """
-    if command_path is None:
+    if not command_path or not isinstance(command_path, Path):
         command_path = Path(__file__).resolve().parent / "Commands"
 
     commands = {}
